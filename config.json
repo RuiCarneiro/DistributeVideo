@@ -3,5 +3,6 @@
  "movies" : "/path/to/movies",
  "tv" : "/path/to/tv",
  "bigfile" : 100.0,
+ "smallfile" : 30.0,
  "command" : "ln -s"
 }
