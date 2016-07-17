@@ -28,6 +28,7 @@ def filesInDirWithExtension(dir, extensions):
     files = []
     for file, f, s in os.walk(dir):
         fileExtension = os.path.splitext(file)[1:]
+        print("file " + file + " extension: " + fileExtension)
         if fileExtension in extensions:
             files.append(file)
     return files
