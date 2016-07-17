@@ -110,5 +110,6 @@ if __name__ == '__main__':
         bigFile = data["bigfile"]
         smallFile = data["smallfile"]
         moveCommand = data["command"]
+        print("Configuration loaded")
         startDistribution()
     print("End")
