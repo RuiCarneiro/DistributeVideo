@@ -46,3 +46,6 @@ Requirements: POSIX OS, Python 3.x.
 
 Don't give me the talk, where I live, most of the TV shows that I watch aren't legally avaliable. Netflix does exist, but the catalog is very poor and late, and the price doesn't reflect that.
 
+## Thanks
+
+To whom did write the Levenshtein distance for Wikipedia.
