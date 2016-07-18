@@ -26,12 +26,17 @@ Requirements: POSIX OS, Python 3.x.
 1. Clone this project to your computer
 
 2. Edit config.json, and set:
+
   "downloads" -> source folder
+
   "movies" -> where the movies go
+
   "tv" -> where the TV series are
 
 3. You can run the script with
+
   $ python3 __init__.py
+  
   run.sh should be a template if you want to send an e-mail at the end
 
 ## What you're trying to do, isn't that illegal?
