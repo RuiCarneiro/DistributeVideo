@@ -9,9 +9,13 @@ files from /downloads
 magically go to
 
 /movies
+
 /tv
+
   /Silicone Valley
+
   /Veep
+
 
 Movies should go to /movies, and TV seires should go to their appropriate folder. Subtitle files go like video files. This is appropriate for a Kodi library
 
