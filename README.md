@@ -4,17 +4,16 @@
 
 A quick and dirty Python script to help you organize video files. It scans one folder, and moves movie files to another appropiate folder, TV series files to another folder with sub-folders organizing the TV shows. E.g.:
 
-files from /downloads
+files from
+
+    /downloads
 
 magically go to
 
-/movies
-
-/tv
-
-  /Silicone Valley
-
-  /Veep
+    /movies
+    /tv
+      /Silicon Valley
+      /Veep
 
 
 Movies should go to /movies, and TV seires should go to their appropriate folder. Subtitle files go like video files. This is appropriate for a Kodi library
@@ -31,15 +30,15 @@ Requirements: POSIX OS, Python 3.x.
 
 2. Edit config.json, and set:
 
-  "downloads" -> source folder
+  `"downloads"` -> source folder
 
-  "movies" -> where the movies go
+  `"movies"` -> where the movies go
 
-  "tv" -> where the TV series are
+  `"tv"` -> where the TV series are
 
 3. You can run the script with
 
-  $ python3 __init__.py
+  `$ python3 __init__.py`
   
   run.sh should be a template if you want to send an e-mail at the end
 
