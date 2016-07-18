@@ -1,17 +1,23 @@
-def lev(s1, s2):
-    l1 = len(s1)
-    l2 = len(s2)
-
-    matrix = [range(l1 + 1)] * (l2 + 1)
-    for zz in range(l2 + 1):
-        matrix[zz] = range(zz, zz + l1 + 1)
-    for zz in range(0, l2):
-        for sz in range(0, l1):
-            if s1[sz] == s2[zz]:
-                matrix[zz + 1][sz + 1] = min(matrix[zz + 1][sz] + 1, matrix[zz][sz + 1] + 1, matrix[zz][sz])
-            else:
-                matrix[zz + 1][sz + 1] = min(matrix[zz + 1][sz] + 1, matrix[zz][sz + 1] + 1, matrix[zz][sz] + 1)
-    return matrix[l2][l1]
+def lev(s, t):
+        ''' From Wikipedia article; Iterative with two matrix rows. '''
+        if s == t:
+            return 0
+        elif len(s) == 0:
+            return len(t)
+        elif len(t) == 0:
+            return len(s)
+        v0 = [None] * (len(t) + 1)
+        v1 = [None] * (len(t) + 1)
+        for i in range(len(v0)):
+            v0[i] = i
+        for i in range(len(s)):
+            v1[0] = i + 1
+            for j in range(len(t)):
+                cost = 0 if s[i] == t[j] else 1
+                v1[j + 1] = min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost)
+            for j in range(len(v0)):
+                v0[j] = v1[j]
+        return v1[len(t)]
 
 
 def levs(compareTo, listToCompare):
@@ -27,16 +33,12 @@ def closestTo(string, list):
 
 
 def tvMatch(string, list):
-    bestMatch = closestTo(string, list)
+    noDots = string.lower().replace(".", " ").replace("_", " ")
+    bestMatch = closestTo(noDots, list)
     bestMatchWords = bestMatch.split()
     biggestWordInBestMatch = max(bestMatchWords, key=len)
-    if biggestWordInBestMatch in string:
+    biggestWordInBestMatch = biggestWordInBestMatch.lower()
+    if biggestWordInBestMatch in noDots.split():
         return bestMatch
     else:
         return None
-
-if __name__ == '__main__':
-    print levs('abc', ['acsdqwe', 'iqweu', 'abd', 'aaa'])
-    print closestTo('12312', ['Game of', 'Thrones', 'Game of Thr', 'Game'])
-    print tvMatch("/asudhas/asdasd/Game.of.Thrones.aabc.mkv", ["Game of War", "Game of Thrones"])
-    pass

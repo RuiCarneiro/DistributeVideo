@@ -3,34 +3,54 @@ import json
 import os
 import re
 import levlib
-
+import glob
+import fnmatch
+import subprocess
 
 # settings
 tvPath = ""
 moviesPath = ""
 downloadsPath = ""
 moveCommand = "mv"
-bigFile = 100.0
-smallFile = 30.0
+bigFile = 100
 
 # data
 videoExtensions = []
 subtitlesExtensions = []
 
 
-def moveFile(frm, to):
-    def escapeChars(string):
-        return string.replace(" ", "\\ ")
-    print(":: " + moveCommand + " " + escapeChars(frm) + " " + escapeChars(to))
+def runProc(command, args):
+    if type(command) is str:
+        command = [command]
+    if type(args) is str:
+        args = [args]
+    cmd = command + args
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    out, err = p.communicate()
+    return out, err
+
+
+def moveFile(x, y):
+    args = ['-v', x, y]
+    o, e = runProc('mv', args)
+    if e is not None:
+        return -1
+    return o, e
+
+
+def listFiles(dir):
+    files = []
+    for file in glob.iglob(dir + "/**/*", recursive=True):
+        files.append(file)
+    return files
 
 
 def filesInDirWithExtension(dir, extensions):
     files = []
-    for file, f, s in os.walk(dir):
-        fileExtension = os.path.splitext(file)[1:]
-        print("file " + file + " extension: " + fileExtension)
-        if fileExtension in extensions:
-            files.append(file)
+    for file in listFiles(dir):
+        for extension in extensions:
+            if fnmatch.fnmatch(file, "*." + extension):
+                files.append(file)
     return files
 
 
@@ -43,20 +63,27 @@ def distributeFile(file):
             moveFile(frm, path)
         else:
             print("No TV show for it")
-    #
-    fileSize = os.path.getsize(file) / (1048576.0)
-    extension = os.path.splittext(file)[1:]
-    isSubtitle = extension in subtitlesExtensions
-    isBigFile = fileSize >= bigFile
+    # is big
+    isBigFile = (os.path.getsize(file) / 1048576) >= bigFile
+    # is subtitle
+    isSubtitle = False
+    for subtitleExtension in subtitlesExtensions:
+        if fnmatch.fnmatch(file, "*." + subtitleExtension):
+            isSubtitle = True
+    # is series
     isSeries = False
-    if re.match(file, "(S|s)\d+(E|e)\d+"):
+    if re.match(".*(S|s)\d+(E|e)\d+.*", file):
         isSeries = True
-    if re.match(file, "\d+x\d+"):
+    if re.match(".*\d+x\d+.*", file):
         isSeries = True
-    dest = ""
+    #if isSeries:
+    #    print("is series")
+    #else:
+    #    print("is not series")
     # distribute
+    dest = ""
     if isSubtitle:
-        if (isSeries):
+        if isSeries:
             dest = "tv"
         else:
             dest = "movie"
@@ -66,10 +93,23 @@ def distributeFile(file):
         elif isBigFile:
             dest = "movie"
         else:
-            dest = ""
+            dest = "small"
     # move file
     if dest == "movie":
+        print("=> Movies")
         moveFile(file, moviesPath)
+    elif dest == "tv":
+        fileName = os.path.basename(file)
+        tvSeries = levlib.tvMatch(fileName, tvShows())
+        if tvSeries is not None:
+            print("=> TV Series: " + tvSeries)
+            moveFile(file, tvPath + "/" + tvSeries)
+        else:
+            print("=> Appropriate TV Series not found in ")
+            print(tvShows())
+            print("Left where it is")
+    elif dest == "small":
+        print("=> Probably a sample file? Please check")
 
 
 def startDistribution():
@@ -85,13 +125,11 @@ def startDistribution():
 
 def tvShows():
     tvShows = []
-    for x in os.listdir(tvShows):
-        if os.path.isdir(x):
+    for x in os.listdir(tvPath):
+        if os.path.isdir(tvPath + "/" + x):
             tvShows.append(x)
-    str = "TV Shows: "
-    for show in tvShows:
-        str = str + show + " "
-    print(str)
+    #print("TV Shows in " + tvPath)
+    #print(tvShows)
     return tvShows
 
 
@@ -108,9 +146,6 @@ if __name__ == '__main__':
         tvPath = data['tv']
         moviesPath = data['movies']
         downloadsPath = data['downloads']
-        bigFile = data["bigfile"]
-        smallFile = data["smallfile"]
-        moveCommand = data["command"]
         print("Configuration loaded")
         startDistribution()
     print("End")
