@@ -6,7 +6,10 @@ INSTALL=$(pwd)
 
 runfile=/tmp/run$$.txt
 
-python3 $INSTALL/__init__.py | tee $runfile
+echo "Distribution of video files" > $runfile
+date >> $runfile
+python3 $INSTALL/__init__.py | tee -a $runfile
+echo End >> $runfile
 
 cat $runfile | mail -s "Video Distribution" root
 

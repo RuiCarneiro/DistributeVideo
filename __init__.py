@@ -1,4 +1,3 @@
-import datetime
 import json
 import os
 import re
@@ -6,17 +5,19 @@ import levlib
 import glob
 import fnmatch
 import subprocess
+import sys
 
-# settings
+# configuration
 tvPath = ""
 moviesPath = ""
 downloadsPath = ""
-moveCommand = "mv"
+
+#constants
 bigFile = 100
 
 # data
-videoExtensions = []
-subtitlesExtensions = []
+videoExtensions = ['mkv', 'avi', 'mp4']
+subtitlesExtensions = ['srt', 'sas', 'sub']
 
 
 def runProc(command, args):
@@ -31,7 +32,7 @@ def runProc(command, args):
 
 
 def moveFile(x, y):
-    args = ['-v', x, y]
+    args = ['-u', x, y]
     o, e = runProc('mv', args)
     if e is not None:
         return -1
@@ -105,22 +106,20 @@ def distributeFile(file):
             print("=> TV Series: " + tvSeries)
             moveFile(file, tvPath + "/" + tvSeries)
         else:
-            print("=> Appropriate TV Series not found in ")
+            print("=> No appropiate TV Series found in:")
             print(tvShows())
             print("Left where it is")
     elif dest == "small":
-        print("=> Probably a sample file? Please check")
+        print("=> Probably a sample file. Left where it is.")
 
 
 def startDistribution():
-    print("Scanning files...")
     extensions = videoExtensions + subtitlesExtensions
     files = filesInDirWithExtension(downloadsPath, extensions)
     for file in files:
         print("* " + file)
         distributeFile(file)
         print("")
-    print("Done")
 
 
 def tvShows():
@@ -128,24 +127,20 @@ def tvShows():
     for x in os.listdir(tvPath):
         if os.path.isdir(tvPath + "/" + x):
             tvShows.append(x)
-    #print("TV Shows in " + tvPath)
-    #print(tvShows)
     return tvShows
 
 
 if __name__ == '__main__':
-    print("Distribute Video")
-    now = datetime.datetime.now().isoformat()
-    print("Running on " + now)
     with open('data.json') as dataFile:
         data = json.load(dataFile)
         videoExtensions = data["video"]
         subtitlesExtensions = data["subtitles"]
-    with open('config.json') as configFile:
-        data = json.load(configFile)
-        tvPath = data['tv']
-        moviesPath = data['movies']
-        downloadsPath = data['downloads']
-        print("Configuration loaded")
-        startDistribution()
-    print("End")
+    try:
+        with open('config.json') as configFile:
+            data = json.load(configFile)
+            tvPath = data['tv']
+            moviesPath = data['movies']
+            downloadsPath = data['downloads']
+            startDistribution()
+    except:
+        raise SystemExit("config.json file not found or invalid.")
