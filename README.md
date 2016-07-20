@@ -16,7 +16,7 @@ magically go to
       /Veep
 
 
-Movies should go to /movies, and TV seires should go to their appropriate folder. Subtitle files go like video files. This is appropriate for a Kodi library
+Movies should go to /movies, and TV seires should go to their appropriate folder. Subtitle files go like video files. This is appropriate for a Kodi library.
 
 ## How does it know?
 
@@ -44,8 +44,10 @@ Requirements: POSIX OS, Python 3.x.
 
 ## What you're trying to do, isn't that illegal?
 
-Don't give me the talk, where I live, most of the TV shows that I watch aren't legally avaliable. Netflix does exist, but the catalog is very poor and late, and the price doesn't reflect that.
+First, no.
+
+Second, don't give me the talk, where I live, most of the TV shows that I watch aren't legally avaliable. Netflix does exist, but the catalog is very poor and late, and the price doesn't reflect that.
 
 ## Thanks
 
-To whom did write the Levenshtein distance for Wikipedia.
+To who did write the Levenshtein distance algorith found in Wikipedia that I'm using.
