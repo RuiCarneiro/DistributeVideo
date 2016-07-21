@@ -1,4 +1,4 @@
 {
- "video" : ["mkv", "avi", "mp4", "m4v"],
- "subtitles" : ["srt", "ass", "sub"]
+ "video" : ["mkv", "avi", "mp4", "m4v", "mov"],
+ "subtitles" : ["srt", "ass", "ssa", "smi", "sub", "idx", "vob"]
 }
