@@ -16,8 +16,10 @@ downloadsPath = ""
 bigFile = 100
 
 # data
-videoExtensions = ['mkv', 'avi', 'mp4']
-subtitlesExtensions = ['srt', 'sas', 'sub']
+videoExtensions = []
+subtitlesExtensions = []
+seriesRE1 = ".*(S|s)\d+(E|e)\d+.*"
+seriesRE2 = ".*\d+x\d+.*"
 
 
 def runProc(command, args):
@@ -64,6 +66,7 @@ def distributeFile(file):
             moveFile(frm, path)
         else:
             print("No TV show for it")
+    fileName = os.path.basename(file)
     # is big
     isBigFile = (os.path.getsize(file) / 1048576) >= bigFile
     # is subtitle
@@ -73,15 +76,17 @@ def distributeFile(file):
             isSubtitle = True
     # is series
     isSeries = False
-    if re.match(".*(S|s)\d+(E|e)\d+.*", file):
+    if re.match(seriesRE1, fileName):
         isSeries = True
-    if re.match(".*\d+x\d+.*", file):
+        m = re.search("(.*)([sS]\d)", fileName)
+        if m:
+            seriesName = m.group(1)
+    if re.match(seriesRE2, fileName):
         isSeries = True
-    #if isSeries:
-    #    print("is series")
-    #else:
-    #    print("is not series")
-    # distribute
+        m = re.search("(.*)(\d+x\d+)", fileName)
+        if m:
+            seriesName = m.group(1)
+    # select destination
     dest = ""
     if isSubtitle:
         if isSeries:
@@ -100,8 +105,7 @@ def distributeFile(file):
         print("=> Movies")
         moveFile(file, moviesPath)
     elif dest == "tv":
-        fileName = os.path.basename(file)
-        tvSeries = levlib.tvMatch(fileName, tvShows())
+        tvSeries = levlib.tvMatch(seriesName, tvShows())
         if tvSeries is not None:
             print("=> TV Series: " + tvSeries)
             moveFile(file, tvPath + "/" + tvSeries)
@@ -131,16 +135,19 @@ def tvShows():
 
 
 if __name__ == '__main__':
-    with open('data.json') as dataFile:
-        data = json.load(dataFile)
-        videoExtensions = data["video"]
-        subtitlesExtensions = data["subtitles"]
+    try:
+        with open('data.json') as dataFile:
+            data = json.load(dataFile)
+            videoExtensions = data["video"]
+            subtitlesExtensions = data["subtitles"]
+    except:
+        raise SystemExit("data.json file not found or invalid.")
     try:
         with open('config.json') as configFile:
             data = json.load(configFile)
             tvPath = data['tv']
             moviesPath = data['movies']
             downloadsPath = data['downloads']
-            startDistribution()
     except:
         raise SystemExit("config.json file not found or invalid.")
+    startDistribution()
