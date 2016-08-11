@@ -46,7 +46,7 @@ Requirements: POSIX OS, Python 3.x.
 
 Turn off the service (e.g. `sudo service transmission-daemon stop` for debian)
 
-Edit your config.json (.e.g `/etc/transmission-daemon/settings.json`) with root permissions, and set the following paramters in the JSON, adding them if necessary:
+Edit your config.json (.e.g `/etc/transmission-daemon/settings.json`), and set the following paramters in the JSON, adding them if necessary:
 
     "script-torrent-done-enabled": true, 
     "script-torrent-done-filename": "/path/to/your/program/copy/run.sh", 
