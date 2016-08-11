@@ -5,7 +5,6 @@ import levlib
 import glob
 import fnmatch
 import subprocess
-import sys
 
 # configuration
 tvPath = ""
@@ -13,13 +12,18 @@ moviesPath = ""
 downloadsPath = ""
 
 #constants
-bigFile = 100
+bigFile = 104857600  # 100MB
 
 # data
 videoExtensions = []
 subtitlesExtensions = []
+
+#re's
 seriesRE1 = ".*(S|s)\d+(E|e)\d+.*"
 seriesRE2 = ".*\d+x\d+.*"
+
+#globals
+debugTvSeriesNames = False
 
 
 def runProc(command, args):
@@ -58,17 +62,9 @@ def filesInDirWithExtension(dir, extensions):
 
 
 def distributeFile(file):
-    def moveTv(frm):
-        fileName = os.path.basename(frm)
-        show = levlib.tvMatch(fileName, tvShows())
-        if show is not None:
-            path = tvPath + "/" + show
-            moveFile(frm, path)
-        else:
-            print("No TV show for it")
     fileName = os.path.basename(file)
     # is big
-    isBigFile = (os.path.getsize(file) / 1048576) >= bigFile
+    isBigFile = os.path.getsize(file) >= bigFile
     # is subtitle
     isSubtitle = False
     for subtitleExtension in subtitlesExtensions:
@@ -102,26 +98,26 @@ def distributeFile(file):
             dest = "small"
     # move file
     if dest == "movie":
-        print("=> Movies")
+        print("  ✔︎ Movies")
         moveFile(file, moviesPath)
     elif dest == "tv":
         tvSeries = levlib.tvMatch(seriesName, tvShows())
         if tvSeries is not None:
-            print("=> TV Series: " + tvSeries)
+            print("  ✔︎ TV Series: " + tvSeries)
             moveFile(file, tvPath + "/" + tvSeries)
         else:
-            print("=> No appropiate TV Series found in:")
-            print(tvShows())
-            print("Left where it is")
+            print("  ✘ No appropiate TV Series folder found. Left there.")
+            global debugTvSeriesNames
+            debugTvSeriesNames = True
     elif dest == "small":
-        print("=> Probably a sample file. Left where it is.")
+        print("  ✘ Probably a sample file. Left there.")
 
 
 def startDistribution():
     extensions = videoExtensions + subtitlesExtensions
     files = filesInDirWithExtension(downloadsPath, extensions)
     for file in files:
-        print("* " + file)
+        print("  ➤ " + file)
         distributeFile(file)
         print("")
 
@@ -151,3 +147,9 @@ if __name__ == '__main__':
     except:
         raise SystemExit("config.json file not found or invalid.")
     startDistribution()
+    if debugTvSeriesNames:
+        series = tvShows()
+        print("")
+        print("You have the following TV Series folders:")
+        for s in series:
+            print("   • " + s)

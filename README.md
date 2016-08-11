@@ -42,6 +42,19 @@ Requirements: POSIX OS, Python 3.x.
   
   run.sh should be a template if you want to send an e-mail at the end
 
+# How to integrate with transmission-daemon for Linux
+
+Turn off the service (e.g. `sudo service transmission-daemon stop` for debian)
+
+Edit your config.json (.e.g `/etc/transmission-daemon/settings.json`) with root permissions, and set the following paramters in the JSON, adding them if necessary:
+
+    "script-torrent-done-enabled": true, 
+    "script-torrent-done-filename": "/path/to/your/program/copy/run.sh", 
+
+This will make run.sh to run on each torrent file download complete (inclusing seeding).
+
+Please remember that the script will run as the same user as `transmission-daemon` uses.
+
 ## What you're trying to do, isn't that illegal?
 
 First, no.
