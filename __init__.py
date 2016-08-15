@@ -15,8 +15,8 @@ downloadsPath = ""
 bigFile = 104857600  # 100MB
 
 # data
-videoExtensions = []
-subtitlesExtensions = []
+videoExtensions = ["mkv", "avi", "mp4", "m4v", "mov"]
+subtitlesExtensions = ["srt", "ass", "ssa", "smi", "sub", "idx", "vob"]
 
 #re's
 seriesRE1 = ".*(S|s)\d+(E|e)\d+.*"
@@ -131,13 +131,6 @@ def tvShows():
 
 
 if __name__ == '__main__':
-    try:
-        with open('data.json') as dataFile:
-            data = json.load(dataFile)
-            videoExtensions = data["video"]
-            subtitlesExtensions = data["subtitles"]
-    except:
-        raise SystemExit("data.json file not found or invalid.")
     try:
         with open('config.json') as configFile:
             data = json.load(configFile)
