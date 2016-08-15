@@ -32,13 +32,18 @@ def closestTo(string, list):
     return list[results.index(min(results))]
 
 
-def tvMatch(string, list):
-    noDots = string.lower().replace(".", " ").replace("_", " ")
-    bestMatch = closestTo(noDots, list)
+def tvMatch(string, tvList):
+    def treatment(T):
+        return T.lower().replace(".", " ").replace("_", " ")
+
+    a = treatment(string)
+    aWords = a.split()
+
+    bestMatch = closestTo(a, tvList)
     bestMatchWords = bestMatch.split()
-    biggestWordInBestMatch = max(bestMatchWords, key=len)
-    biggestWordInBestMatch = biggestWordInBestMatch.lower()
-    if biggestWordInBestMatch in noDots.split():
+    biggestWordInBestMatch = treatment(max(bestMatchWords, key=len))
+
+    if biggestWordInBestMatch in aWords:
         return bestMatch
     else:
         return None
