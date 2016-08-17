@@ -40,7 +40,10 @@ Requirements: POSIX OS, Python 3.x.
 
   `$ python3 __init__.py`
   
-  run.sh should be a template if you want to send an e-mail at the end
+  `run.sh` is an handy script that can send you an email at the end (if you have an email MTA)
+  configured in your machine. Edit `run.sh` to set the email configurations, and test the script by running:
+
+  `$ ./run.sh`
 
 # How to integrate with transmission-daemon for Linux
 
@@ -51,15 +54,13 @@ Edit your config.json (.e.g `/etc/transmission-daemon/settings.json`), and set t
     "script-torrent-done-enabled": true, 
     "script-torrent-done-filename": "/path/to/your/program/copy/run.sh", 
 
-This will make run.sh to run on each torrent file download complete (inclusing seeding).
+This will make run.sh to run on each torrent file download complete (inclusing seeding). But also, remember that DistributeVideo will run blind to what transmission-daemon is doing, so it's a good idea to store the files being downloaded, but not completed, in a different path:
 
-Please remember that the script will run as the same user as `transmission-daemon` uses.
+    "incomplete-dir-enabled": true
 
-## What you're trying to do, isn't that illegal?
+And set the `"incomplete-dir"` to a directory you would like to be used.
 
-First, no.
-
-Second, don't give me the talk, where I live, most of the TV shows that I watch aren't legally avaliable. Netflix does exist, but the catalog is very poor and late, and the price doesn't reflect that.
+Please remember that the script will run as the same user as `transmission-daemon` uses, so make sure that that user can read and write in the necessary folders.
 
 ## Thanks
 
