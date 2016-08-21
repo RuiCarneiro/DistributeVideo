@@ -10,6 +10,7 @@ import subprocess
 tvPath = ""
 moviesPath = ""
 downloadsPath = ""
+processedList = False
 
 #constants
 bigFile = 104857600  # 100MB
@@ -114,12 +115,32 @@ def distributeFile(file):
 
 
 def startDistribution():
+    processedListFilePath = downloadsPath + "/.dvprocessed"
     extensions = videoExtensions + subtitlesExtensions
     files = filesInDirWithExtension(downloadsPath, extensions)
+    #processedList
+    processedFiles = []
+    if processedList:
+        try:
+            with open(processedListFilePath) as processedListFile:
+                processedFiles = processedListFile.read().splitlines()
+                processedListFile.close()
+        except:
+            processedListFile = open(processedListFilePath, 'w')
+            processedListFile.close()
+    #file by file
     for file in files:
-        print("  ➤ " + file)
-        distributeFile(file)
-        print("")
+        if file not in processedFiles:
+            print("  ➤ " + file)
+            distributeFile(file)
+            print("")
+            processedFiles.append(file)
+    #save processedList
+    if processedList:
+        with open(processedListFilePath, 'w') as processedListFile:
+            for file in processedFiles:
+                processedListFile.write(file + "\n")
+            processedListFile.close()
 
 
 def tvShows():
@@ -134,9 +155,11 @@ if __name__ == '__main__':
     try:
         with open('config.json') as configFile:
             data = json.load(configFile)
+            configFile.close()
             tvPath = data['tv']
             moviesPath = data['movies']
             downloadsPath = data['downloads']
+            processedList = data['proclist']
     except:
         raise SystemExit("config.json file not found or invalid.")
     startDistribution()

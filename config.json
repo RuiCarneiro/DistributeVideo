@@ -1,5 +1,6 @@
 {
  "downloads" : "/path/to/downloads",
  "movies" : "/path/to/movies",
- "tv" : "/path/to/tv"
+ "tv" : "/path/to/tv",
+ "proclist" : true
 }

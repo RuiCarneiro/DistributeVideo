@@ -36,6 +36,8 @@ Requirements: POSIX OS, Python 3.x.
 
   `"tv"` -> where the TV series are
 
+  `"proclist"` -> true/false -> only process files once (if one file has been processed once, do not try to processe it another time even if found in the source ("downloads") folder).
+
 3. You can run the script with
 
   `$ python3 __init__.py`
