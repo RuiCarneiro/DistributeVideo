@@ -26,7 +26,6 @@ def levs(compareTo, listToCompare):
         levs.append(lev(compareTo, compare))
     return levs
 
-
 def closestTo(string, list):
     results = levs(string, list)
     return list[results.index(min(results))]

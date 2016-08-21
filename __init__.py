@@ -101,17 +101,22 @@ def distributeFile(file):
     if dest == "movie":
         print("  ✔︎ Movies")
         moveFile(file, moviesPath)
+        return True
     elif dest == "tv":
         tvSeries = levlib.tvMatch(seriesName, tvShows())
         if tvSeries is not None:
             print("  ✔︎ TV Series: " + tvSeries)
             moveFile(file, tvPath + "/" + tvSeries)
+            return True
         else:
             print("  ✘ No appropiate TV Series folder found. Left there.")
             global debugTvSeriesNames
             debugTvSeriesNames = True
+            return False
     elif dest == "small":
         print("  ✘ Probably a sample file. Left there.")
+        return True
+    return False
 
 
 def startDistribution():
@@ -132,9 +137,10 @@ def startDistribution():
     for file in files:
         if file not in processedFiles:
             print("  ➤ " + file)
-            distributeFile(file)
+            result = distributeFile(file)
             print("")
-            processedFiles.append(file)
+            if result:
+                processedFiles.append(file)
     #save processedList
     if processedList:
         with open(processedListFilePath, 'w') as processedListFile:
