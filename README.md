@@ -2,7 +2,7 @@
 
 ## What it is
 
-A quick and dirty Python script to help you organize video files. It scans one folder, and moves movie files to another appropiate folder, TV series files to another folder with sub-folders organizing the TV shows. E.g.:
+A quick and dirty Python script to help you organize video files. It scans one folder, and moves/copy/symlinks movie files to another appropiate folder, TV series files to another folder with sub-folders organizing the TV shows. E.g.:
 
 files from
 
@@ -32,11 +32,13 @@ Requirements: POSIX OS, Python 3.x.
 
   `"downloads"` -> source folder
 
-  `"movies"` -> where the movies go
+  `"movies"` -> where the movies should be
 
-  `"tv"` -> where the TV series are
+  `"tv"` -> where the TV series should be
 
-  `"proclist"` -> true/false -> only process files once (if one file has been processed once, do not try to processe it another time even if found in the source ("downloads") folder).
+  `"proclist"` -> true/false -> only process files once (if one file has been processed once, do not try to processe it another time even if found in the source ("downloads") folder). Recomended: `true`.
+
+  `"mode"` -> `copy`/`move`/`symbolic` -> what to do with files. `copy` and `move` are self explanatory. `symbolic` creates symbolic links, you must be using a filesystem that supports it (like ext4 or NTFS, unlike FAT32 or ExFAT). Important note: if you're using `copy` or `symbolic`, you really should be setting `proclist` to true, or else, the script will act like you just downloaded everything you have on your source folder every time.
 
 3. You can run the script with
 

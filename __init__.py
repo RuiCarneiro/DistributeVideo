@@ -11,6 +11,7 @@ tvPath = ""
 moviesPath = ""
 downloadsPath = ""
 processedList = False
+mode = "copy"
 
 #constants
 bigFile = 104857600  # 100MB
@@ -38,9 +39,17 @@ def runProc(command, args):
     return out, err
 
 
-def moveFile(x, y):
-    args = ['-u', x, y]
-    o, e = runProc('mv', args)
+def placeFile(x, y):
+    if mode == "move":
+        cmd = 'mv'
+        args = ['-u', x, y]
+    elif mode == "symbolic":
+        cmd = 'ln'
+        args = ['-s', x, y]
+    elif mode == "copy":
+        cmd = 'cp'
+        args = [x, y]
+    o, e = runProc(cmd, args)
     if e is not None:
         return -1
     return o, e
@@ -100,13 +109,13 @@ def distributeFile(file):
     # move file
     if dest == "movie":
         print("  ✔︎ Movies")
-        moveFile(file, moviesPath)
+        placeFile(file, moviesPath)
         return True
     elif dest == "tv":
         tvSeries = levlib.tvMatch(seriesName, tvShows())
         if tvSeries is not None:
             print("  ✔︎ TV Series: " + tvSeries)
-            moveFile(file, tvPath + "/" + tvSeries)
+            placeFile(file, tvPath + "/" + tvSeries)
             return True
         else:
             print("  ✘ No appropiate TV Series folder found. Left there.")
@@ -162,10 +171,11 @@ if __name__ == '__main__':
         with open('config.json') as configFile:
             data = json.load(configFile)
             configFile.close()
-            tvPath = data['tv']
-            moviesPath = data['movies']
-            downloadsPath = data['downloads']
+            tvPath = data['tv'].rstrip('/').rstrip('\\')
+            moviesPath = data['movies'].rstrip('/').rstrip('\\')
+            downloadsPath = data['downloads'].rstrip('/').rstrip('\\')
             processedList = data['proclist']
+            mode = data['mode']
     except:
         raise SystemExit("config.json file not found or invalid.")
     startDistribution()
