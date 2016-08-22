@@ -49,6 +49,8 @@ def placeFile(x, y):
     elif mode == "copy":
         cmd = 'cp'
         args = [x, y]
+    else:
+        raise SystemExit("Configuration file invalid (for key: mode)")
     o, e = runProc(cmd, args)
     if e is not None:
         return -1
@@ -177,7 +179,7 @@ if __name__ == '__main__':
             processedList = data['proclist']
             mode = data['mode']
     except:
-        raise SystemExit("config.json file not found or invalid.")
+        raise SystemExit("Configuration file not found or invalid.")
     startDistribution()
     if debugTvSeriesNames:
         series = tvShows()
