@@ -11,7 +11,7 @@ tvPath = ""
 moviesPath = ""
 downloadsPath = ""
 processedList = False
-mode = "move"
+mode = ""
 
 #constants
 bigFile = 104857600  # 100MB
