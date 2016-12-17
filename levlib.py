@@ -1,3 +1,6 @@
+import re
+
+
 def lev(s, t):
     ''' From Wikipedia article; Iterative with two matrix rows. '''
     if s == t:
@@ -26,6 +29,7 @@ def levs(compareTo, listToCompare):
         levs.append(lev(compareTo, compare))
     return levs
 
+
 def closestTo(string, list):
     results = levs(string, list)
     return list[results.index(min(results))]
@@ -39,8 +43,9 @@ def tvMatch(string, tvList):
     aWords = a.split()
 
     bestMatch = closestTo(a, tvList)
-    bestMatchWords = bestMatch.split()
-    biggestWordInBestMatch = treatment(max(bestMatchWords, key=len))
+    bestMatchWithoutDate = re.sub(" \(\d+\)", "", bestMatch)
+    bestMatchWithoutDateWords = bestMatchWithoutDate.split()
+    biggestWordInBestMatch = treatment(max(bestMatchWithoutDateWords, key=len))
 
     if biggestWordInBestMatch in aWords:
         return bestMatch
