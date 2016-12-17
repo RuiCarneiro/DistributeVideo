@@ -64,8 +64,10 @@ This will make run.sh to run on each torrent file download complete (inclusing s
 
 And set the `"incomplete-dir"` to a directory you would like to be used.
 
-Please remember that the script will run as the same user as `transmission-daemon` uses, so make sure that that user can read and write in the necessary folders.
+Please remember that the script will run as the same user as `transmission-daemon` uses, so make sure that that user has the proper permissions for the folders and files.
+
+TIP: adding your user(s) to the `transmission-daemon` group, giving `rwx` permissions to the pertaining directories, and setting the `umask` to `2` in Transmission's `settings.json` might help.
 
 ## Thanks
 
-To who did write the Levenshtein distance algorith found in Wikipedia that I'm using.
+To who did write the Levenshtein distance algorithm from Wikipedia that I'm using.
