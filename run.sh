@@ -20,7 +20,7 @@ python3 $INSTALL/__init__.py | tee -a $runfile
 
 if [ $EMAIL = "on" ]; then
 	lines=$(wc -l $runfile | awk '{print $1}')
-	if [ $lines > 1 ]; then
+	if [ $lines -ge 2 ]; then
 		cat $runfile | mail -s "$EMAIL_SUBJECT" $EMAIL_RECIPIENT
 	fi
 fi
