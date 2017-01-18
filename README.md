@@ -43,9 +43,8 @@ Requirements: POSIX OS, Python 3.x.
 3. You can run the script with
 
   `$ python3 __init__.py`
-  
-  `run.sh` is an handy script that can send you an email at the end (if you have an email MTA)
-  configured in your machine. Edit `run.sh` to set the email configurations, and test the script by running:
+
+  Finally, `run.sh` is an handy script that can send you an email at the end (if you have an email MTA configured). Edit `run.sh` to set the email configurations, and test the script by running:
 
   `$ ./run.sh`
 
@@ -55,8 +54,8 @@ Turn off the service (e.g. `sudo service transmission-daemon stop` for debian)
 
 Edit your config.json (.e.g `/etc/transmission-daemon/settings.json`), and set the following paramters in the JSON, adding them if necessary:
 
-    "script-torrent-done-enabled": true, 
-    "script-torrent-done-filename": "/path/to/your/program/copy/run.sh", 
+    "script-torrent-done-enabled": true,
+    "script-torrent-done-filename": "/path/to/your/program/copy/run.sh",
 
 This will make run.sh to run on each torrent file download complete (inclusing seeding). But also, remember that DistributeVideo will run blind to what transmission-daemon is doing, so it's a good idea to store the files being downloaded, but not completed, in a different path:
 
