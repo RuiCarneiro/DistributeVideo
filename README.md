@@ -57,7 +57,7 @@ Edit your config.json (.e.g `/etc/transmission-daemon/settings.json`), and set t
     "script-torrent-done-enabled": true,
     "script-torrent-done-filename": "/path/to/your/program/copy/run.sh",
 
-This will make run.sh to run on each torrent file download complete (inclusing seeding). But also, remember that DistributeVideo will run blind to what transmission-daemon is doing, so it's a good idea to store the files being downloaded, but not completed, in a different path:
+This will make run.sh to run on each torrent file download complete. But also, remember that DistributeVideo will run **blindly** to what transmission-daemon is doing, so it's a good idea to store the files being downloaded, but not completed, in a different path:
 
     "incomplete-dir-enabled": true
 
