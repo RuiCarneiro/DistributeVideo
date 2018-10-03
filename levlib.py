@@ -23,31 +23,31 @@ def lev(s, t):
     return v1[len(t)]
 
 
-def levs(compareTo, listToCompare):
+def levs(compare_to, list_to_compare):
     levs = []
-    for compare in listToCompare:
-        levs.append(lev(compareTo, compare))
+    for compare in list_to_compare:
+        levs.append(lev(compare_to, compare))
     return levs
 
 
-def closestTo(string, list):
+def closest_to(string, list):
     results = levs(string, list)
     return list[results.index(min(results))]
 
 
-def tvMatch(string, tvList):
-    def treatment(T):
-        return T.lower().replace(".", " ").replace("_", " ")
+def tv_match(string, tv_list):
+    def treatment(str):
+        return str.lower().replace(".", " ").replace("_", " ")
 
     a = treatment(string)
-    aWords = a.split()
+    all_words = a.split()
 
-    bestMatch = closestTo(a, tvList)
-    bestMatchWithoutDate = re.sub(" \(\d+\)", "", bestMatch)
-    bestMatchWithoutDateWords = bestMatchWithoutDate.split()
-    biggestWordInBestMatch = treatment(max(bestMatchWithoutDateWords, key=len))
+    best_match = closest_to(a, tv_list)
+    best_match_without_date = re.sub(" \(\d+\)", "", best_match)
+    best_match_without_date_words = best_match_without_date.split()
+    biggest_word_in_best_match = treatment(max(best_match_without_date_words, key=len))
 
-    if biggestWordInBestMatch in aWords:
-        return bestMatch
+    if biggest_word_in_best_match in all_words:
+        return best_match
     else:
         return None
